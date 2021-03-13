@@ -19,60 +19,10 @@ import time
 app = dash.Dash(__name__)
 app.title='DASH APP'
 
-df2 = px.data.iris()
 colors = {
     'background': '#111111',
     'text': '#7FDBFF'
 }
-
-df2["species"]=df2["species"].astype(str)
-fig = px.scatter_3d(df2, x='sepal_length', y='sepal_width', z='petal_width',
-              color='species', color_discrete_sequence=px.colors.qualitative.G10,)
-
-fig.update_layout(
-    plot_bgcolor='rgba(0,0,0,0)',
-    paper_bgcolor='rgba(0,0,0,0)',
-    width=800, 
-    height=600,
-    scene = dict(
-                    xaxis = dict(
-                         backgroundcolor="rgba(0,0,0,0)",
-                         showticklabels=False,
-                         showgrid=False, 
-                         title=''
-                         ),
-                    yaxis = dict(
-                        backgroundcolor="rgba(0,0,0,0)",
-                        showticklabels=False,
-                        showgrid=False,
-                        title=''
-                        ),
-                    zaxis = dict(
-                        backgroundcolor="rgba(0,0,0,0)",
-                        showticklabels=False,
-                        showgrid=False,
-                        title=''
-                        )
-    ),
-    legend=dict(
-        x=0,
-        y=1,
-        title='',
-        font=dict(
-            family="Times New Roman",
-            size=16,
-            color="white"
-        ),
-        itemsizing='trace',
-        # bgcolor="#e6fcf8",
-        # bordercolor="Black",
-        # borderwidth=1
-    ),
-    
-)
-
-
-
 
 app.layout = html.Div([
     html.Div([
@@ -165,10 +115,11 @@ app.layout = html.Div([
                 id="loading-1",
                 type="cube",
                 children=dcc.Graph(
-                    figure=fig,
+                    #figure=fig,
                     id='graph-display',
                     style={'display': 'none'},
                 ),
+                style={'textAlign' : 'center','top': '50%'},
             ),
 
             html.Div(
@@ -285,10 +236,40 @@ def update_my_output3(n_clicks1, n_clicks2):
         raise PreventUpdate
     else:
         if flag == 'btn-run':
-            time.sleep(5)
+            time.sleep(3)
             return [{'display': 'inline-block'}, {'display': 'none'}]
         elif flag == 'output-data-upload':
             return [{'display': 'none'}, {'display': 'inline-block'}]
+
+
+@app.callback(
+    Output('graph-display', 'figure'),
+    [Input('btn-run', 'n_clicks'),
+    State('field-dropdown', 'value'),
+    ])
+def update_my_output_anogen(n_clicks1, val):
+    if n_clicks1 is None:
+        raise PreventUpdate
+    else:
+
+        fig = px.scatter(
+            dff,
+            x=val[0],
+            y=val[1], 
+            
+            #trendline="lowess",
+            color_discrete_sequence=px.colors.qualitative.Set1
+        )
+
+        fig.update_layout(
+            
+            width=800,
+            height=450,
+            )
+
+
+        return fig
+
 
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=8050, debug=True)
