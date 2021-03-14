@@ -125,7 +125,7 @@ app.layout = html.Div([
             html.Div(
                 id='output-data-upload',
                 style={'display': 'inline-block',
-                'overflowY': 'scroll', 'maxHeight': 610,'overflowX': 'scroll', 'maxWidth': 1050}
+                'overflowY': 'scroll', 'maxHeight': 395,'overflowX': 'scroll', 'maxWidth': 800}
             ),
 
         ], style={'width': '80%',
